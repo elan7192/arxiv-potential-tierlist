@@ -1,0 +1,5 @@
+.zerodeploy_claim_token
+.zerodeploy_url
+*token*
+*.pem
+.env

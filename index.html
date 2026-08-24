@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>arXiv Potential Tierlist</title>
+  <meta name="description" content="arXiv papers ranked by future runway, not citations." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <header class="hero">
+    <p class="kicker">not citations · not h-index · runway only</p>
+    <h1>arXiv Potential Tierlist</h1>
+    <p class="sub">Ranked by <em>future potential</em> — room left to develop — not prestige. Heuristic scores, no LLM judge.</p>
+    <p class="banner">Corpus 1990-01-01 to 2026-08-20. 66,555 unique papers ranked. Showing top ~800 per tier (S/A/B/C/D) from 66,555 ranked, not top 4000 overall.</p>
+    <div class="stats" id="statbar"></div>
+    <div class="controls">
+      <input id="q" type="search" placeholder="Search title, author, id…" autocomplete="off" />
+      <select id="cat"><option value="">All categories</option></select>
+      <select id="tier"><option value="">All tiers</option>
+        <option>S</option><option>A</option><option>B</option><option>C</option><option>D</option>
+      </select>
+      <select id="sort">
+        <option value="score">Sort: score</option>
+        <option value="date">Sort: date</option>
+        <option value="title">Sort: title</option>
+      </select>
+      <button type="button" id="howto" class="ghost">How ranking works</button>
+    </div>
+  </header>
+
+  <main id="board" class="board" aria-live="polite"></main>
+  <p class="empty" id="empty" hidden>No papers match. Clear filters.</p>
+
+  <footer>
+    <p>66,555 unique papers ranked · ~800 shown per tier (S/A/B/C/D) · snapshot 2026-08-23</p>
+    <p>Score = recency + generality + openness + early-field + novelty − saturation. See ranking notes.</p>
+  </footer>
+
+  <dialog id="modal">
+    <article>
+      <header>
+        <h2>How papers get a tier</h2>
+        <button type="button" id="closeModal" class="ghost">Close</button>
+      </header>
+      <div class="md" id="rankingBody">
+        <p>Deterministic keyword / metadata heuristics. No per-paper LLM.</p>
+        <p><strong>Tiers:</strong> S ≥ 80 · A ≥ 68 · B ≥ 52 · C ≥ 38 · D &lt; 38</p>
+        <p><code>score = clamp(0,100, 38 + recency(0–30) + generality(0–20) + openness(0–15) + early_field(0–12) + novelty(0–8) − saturation(0–28))</code></p>
+        <ul>
+          <li>Recency: logistic vs 2026-08-23. Corpus now spans 1990–2026-08-20, so recent papers get the full recency boost.</li>
+          <li>Generality: foundation / agent / reasoning / framework / benchmark…</li>
+          <li>Openness: no journal_ref, workshop/preprint comments, v1-ish.</li>
+          <li>Early field: cs.AI, cs.LG, cs.CL, cs.RO, cs.NE, cs.CY, eess.AS, q-bio.*</li>
+          <li>Saturation: surveys, replications, old journal articles.</li>
+        </ul>
+        <p>A famous 2017 Transformer would score lower than a 2026 open-ended-agent preprint. Intentional. Full spec: <a href="RANKING.md">RANKING.md</a>.</p>
+      </div>
+    </article>
+  </dialog>
+  <script src="app.js"></script>
+</body>
+</html>
