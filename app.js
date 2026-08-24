@@ -78,7 +78,7 @@ function fillStats() {
   const m = DATA.meta || {};
   const full = m.tiers_full || {};
   const shown = m.shown || DATA.papers.length;
-  const ranked = m.ranked || 281056;
+  const ranked = m.ranked || 333056;
   const parts = [
     `<span class="pill">ranked <b>${ranked.toLocaleString()}</b></span>`,
     `<span class="pill">shown <b>${shown.toLocaleString()}</b></span>`,
