@@ -78,7 +78,7 @@ function fillStats() {
   const m = DATA.meta || {};
   const full = m.tiers_full || {};
   const shown = m.shown || DATA.papers.length;
-  const ranked = m.ranked || 66555;
+  const ranked = m.ranked || 106856;
   const parts = [
     `<span class="pill">ranked <b>${ranked.toLocaleString()}</b></span>`,
     `<span class="pill">shown <b>${shown.toLocaleString()}</b></span>`,
@@ -92,7 +92,25 @@ function fillStats() {
 
 async function main() {
   const res = await fetch("data/papers.json");
-  DATA = await res.json();
+  const raw = await res.json();
+  let stats = {};
+  try {
+    stats = await (await fetch("data/stats.json")).json();
+  } catch (e) {
+    stats = {};
+  }
+  if (Array.isArray(raw)) {
+    DATA = {
+      papers: raw,
+      meta: {
+        ranked: stats.total,
+        shown: stats.displayed || raw.length,
+        tiers_full: stats.count_by_potential_tier || {},
+      },
+    };
+  } else {
+    DATA = raw;
+  }
   fillCats();
   fillStats();
   render();
